@@ -72,7 +72,8 @@ QnetToCell = utils.QnetToCell(X_SIZE, Y_SIZE)
 def select_action(state, test):
     global steps_done
     if test:
-        return Q_net(state).max(0)[1]
+        with torch.no_grad():
+            return Q_net(state).max(0)[1]
     else:
         sample = random.random()    # random value b/w 0 ~ 1 
         eps_threshold = EPS_END + (EPS_START - EPS_END) * \
