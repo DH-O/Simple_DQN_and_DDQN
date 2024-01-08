@@ -36,7 +36,7 @@ TEST_EPISODES   = 10
 TARGET_UPDATE   = NUM_EPISODES//10
 
 RM_SIZE             = 1000000
-BATCH_SIZE          = 1024
+BATCH_SIZE          = 2048
 GAMMA               = 0.9
 EPS_START           = 0.7
 EPS_END             = 0.15

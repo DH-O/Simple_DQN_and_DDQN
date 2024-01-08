@@ -20,7 +20,11 @@ def train(TIME_LIMIT, TARGET_UPDATE, steps_done, device, path, Q_net, target_Q_n
         loss = optimize_model()
             
         if steps_done % TARGET_UPDATE == 0:
-            target_Q_net.load_state_dict(Q_net.state_dict())
+            q_target_state_dict = target_Q_net.state_dict()
+            q_state_dict = Q_net.state_dict()
+            for key in q_state_dict:
+                q_target_state_dict[key] = q_state_dict[key]*0.5 + q_target_state_dict[key]*(1-0.5) # 0.005 is the tau value, soft update
+            target_Q_net.load_state_dict(q_target_state_dict)
         if done:
             break
     return t,done,loss
