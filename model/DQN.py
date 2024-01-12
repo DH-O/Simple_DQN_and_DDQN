@@ -17,11 +17,11 @@ def optimize_model_DQN(buffer, BATCH_SIZE, Q_net, target_Q_net, optimizer, GAMMA
     Q_values = Q_net(state_batch).gather(1, action_batch)   # q(s,a)
     
     with torch.no_grad():
-        next_state_Q_values_array = target_Q_net(non_final_next_states).max(1)[0]                       # max_a(q_target(s',a))
-        expected_Q_values_array = (next_state_Q_values_array.mul(mask_batch) * GAMMA) + reward_batch    # r + gamma * max_a(q_target(s',a)) * mask_batch
+        next_state_Q_values_array = target_Q_net(non_final_next_states).max(1)[0]                       # max_a(q_target(s',a)). target_Q_net(non_final_next_states).max(1) returns (max_value, max_index).
+        expected_Q_values_array = (next_state_Q_values_array.mul(mask_batch) * GAMMA) + reward_batch    # r + gamma * max_a(q_target(s',a)) * mask_batch.
     
     criterion = nn.MSELoss()
-    loss = criterion(Q_values, expected_Q_values_array.unsqueeze(-1))
+    loss = criterion(Q_values, expected_Q_values_array.unsqueeze(-1))   # expected_Q_values_array.unsqueeze(-1).shape = (BATCH_SIZE, 1)
     
     optimizer.zero_grad()               # optimizer reset
     loss.backward()                     # calculate backprop
